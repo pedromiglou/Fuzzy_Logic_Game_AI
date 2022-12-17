@@ -24,7 +24,6 @@ p_hand = [
         ]
 
 for card in p_hand:
-    print(card)
     deck.remove(card)
     
 for card in board:
@@ -44,7 +43,7 @@ Card.print_pretty_cards(p_hand)
 print("Community cards: ")
 Card.print_pretty_cards(board)
 print()
-
+Card.print_pretty_cards(deck)
 
 # computes ocurrences with only 4 cards in the board, 2nd turn
 prob_turn = {}
