@@ -8,13 +8,34 @@ evaluator = Evaluator()
 n = 52 # maximum draws
 n_board = 3 # initial board draws
 n_player = 2 #player draws
+
+deck = deck.draw(n) # draws all cards
+
+board = [
+        Card.new('Ad'),
+        Card.new('7d'),
+        Card.new('2s'),
+        ]
+
+
+p_hand = [
+        Card.new('Ah'),
+        Card.new('6c'),
+        ]
+
+for card in p_hand:
+    deck.remove(card)
+    
+for card in board:
+    deck.remove(card)
+
 n = n - n_board - n_player #maximum draws after drawing board and player hand cards
 
 
 # 1st turn
-board = deck.draw(n_board)
-p_hand = deck.draw(n_player)
-deck = deck.draw(n) # draws remaining cards so its easier to access them
+# board = deck.draw(n_board)
+# p_hand = deck.draw(n_player)
+# deck = deck.draw(n) # draws remaining cards so its easier to access them
 
 #prints current cards and cards available in the deck
 print("Player's hand: ")
@@ -22,7 +43,7 @@ Card.print_pretty_cards(p_hand)
 print("Community cards: ")
 Card.print_pretty_cards(board)
 print()
-
+Card.print_pretty_cards(deck)
 
 # computes ocurrences with only 4 cards in the board, 2nd turn
 prob_turn = {}
