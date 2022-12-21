@@ -27,11 +27,14 @@ def calcProb(hand: list = [], board: list = []):
         board.append(deck.pop())
 
     else:
-            for i in range(2):
-                deck.remove
-                
-            for card in board:
-                deck.remove(card)
+        hand = [Card.new(card) for card in hand]
+        board = [Card.new(card) for card in board]
+            
+        for card in hand:
+            deck.remove(card)
+            
+        for card in board:
+            deck.remove(card)
 
     # number of draws
     n_board = len(board) # initial board draws
@@ -55,5 +58,3 @@ def calcProb(hand: list = [], board: list = []):
     prob.update((key, value /(n)) for key, value in prob.items())
     
     return prob
-
-print(calcProb())
