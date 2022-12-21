@@ -43,7 +43,7 @@ def calcProb(hand: list = [], board: list = []):
     n = n - n_board - n_player #maximum draws after drawing board and player hand cards
 
     # computes ocurrences with only 4 or 5 cards in the board, 2nd turn
-    prob = {}
+    prob = {hand: 0 for hand in hand_dict.items()}
     for i in range(n):
         # draws a card to the board
         board_sim = board + [deck[i]]
