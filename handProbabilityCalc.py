@@ -54,6 +54,6 @@ def calcProb(hand: list = [], board: list = []):
             prob[hand_dict[class_sim]] = 1
     prob.update((key, value /(n)) for key, value in prob.items())
     
-    return prob, hand, board
+    return prob
 
 print(calcProb())
