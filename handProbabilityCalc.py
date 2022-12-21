@@ -1,119 +1,59 @@
 from treys import Card, Deck, Evaluator
+from itertools import combinations
+def calcProb(hand: list = [], board: list = []):
 
-# initializes Deck and Evaluator
-deck = Deck()
-evaluator = Evaluator()
+    # convert treys class names to fuzzy inputs
+    hand_dict = {'Royal Flush': 'probRF', 'Straight Flush': 'probSF', 
+                 'Four of a Kind': 'probFK', 'Full House': 'probFH',
+                 'Flush': 'probF', 'Straight': 'probS',
+                 'Three of a Kind': 'probTK', 'Two Pair': 'probTP',
+                 'Pair': 'probOP', 'High Card': 'probHC'
+                 }
 
-# number of draws
-n = 52 # maximum draws
-n_board = 3 # initial board draws
-n_player = 2 #player draws
+    # initializes Deck and Evaluator
+    deck = Deck()
+    evaluator = Evaluator()
 
-deck = deck.draw(n) # draws all cards
+    n = 52 #maximum number of draws
+    deck = deck.draw(n) # draws all cards
 
-board = [
-        Card.new('Ad'),
-        Card.new('7d'),
-        Card.new('2s'),
-        ]
+    # if player and board hands are empty, create new
+    if hand == [] and board == []:
+        hand.append(deck.pop())
+        hand.append(deck.pop())
+        
+        board.append(deck.pop())
+        board.append(deck.pop())
+        board.append(deck.pop())
 
+    else:
+            for i in range(2):
+                deck.remove
+                
+            for card in board:
+                deck.remove(card)
 
-p_hand = [
-        Card.new('Ah'),
-        Card.new('6c'),
-        ]
+    # number of draws
+    n_board = len(board) # initial board draws
+    n_player = len(hand) #player draws
 
-for card in p_hand:
-    deck.remove(card)
-    
-for card in board:
-    deck.remove(card)
+    n = n - n_board - n_player #maximum draws after drawing board and player hand cards
 
-n = n - n_board - n_player #maximum draws after drawing board and player hand cards
-
-
-# 1st turn
-# board = deck.draw(n_board)
-# p_hand = deck.draw(n_player)
-# deck = deck.draw(n) # draws remaining cards so its easier to access them
-
-#prints current cards and cards available in the deck
-print("Player's hand: ")
-Card.print_pretty_cards(p_hand)
-print("Community cards: ")
-Card.print_pretty_cards(board)
-print()
-Card.print_pretty_cards(deck)
-
-# computes ocurrences with only 4 cards in the board, 2nd turn
-prob_turn = {}
-for i in range(n):
-    # draws a card to the board
-    board_sim = board + [deck[i]]
-    p_score_sim = evaluator.evaluate(board_sim, p_hand)
-    p_class_sim = evaluator.class_to_string(evaluator.get_rank_class(p_score_sim))
-       
-    try:
-        prob_turn[p_class_sim] += 1
-    
-    except:
-        prob_turn[p_class_sim] = 1
-
-# computes ocurrences with 4 and then 5 cards in the board, last turn
-prob_turn_and_river = {}
-for i in range(n):
-    # draws a card to the board
-    board_sim = board + [deck[i]]
-    for j in range(n-1):
-        # draws a 5th and final card to the board
-        board_sim = board + [deck[j]]
-        p_score_sim = evaluator.evaluate(board_sim, p_hand) 
-        p_class_sim = evaluator.class_to_string(evaluator.get_rank_class(p_score_sim)) 
-
+    # computes ocurrences with only 4 or 5 cards in the board, 2nd turn
+    prob = {}
+    for i in range(n):
+        # draws a card to the board
+        board_sim = board + [deck[i]]
+        score_sim = evaluator.evaluate(board_sim, hand)
+        class_sim = evaluator.class_to_string(evaluator.get_rank_class(score_sim))
+        
         try:
-            prob_turn_and_river[p_class_sim] += 1
-    
+            prob[hand_dict[class_sim]] += 1
+        
         except:
-            prob_turn_and_river[p_class_sim] = 1
+            prob[hand_dict[class_sim]] = 1
+    prob.update((key, value /(n)) for key, value in prob.items())
+    
+    return prob, hand, board
 
-board = board + [deck.pop()] # turns the 4th card
-prob_river = {}
-# computes ocurrences with 5 cards in the board, last turn
-for i in range(n-1):
-    board_sim = board + [deck[i]]
-    p_score_sim = evaluator.evaluate(board_sim, p_hand) 
-    p_class_sim = evaluator.class_to_string(evaluator.get_rank_class(p_score_sim)) 
-    try:
-        prob_river[p_class_sim] += 1
-
-    except:
-        prob_river[p_class_sim] = 1
-
-
-# calculates probability for the hands
-prob_turn.update((key, value /n) for key, value in prob_turn.items())
-prob_turn_and_river.update((key, value /(n*(n-1))) for key, value in prob_turn_and_river.items())
-prob_river.update((key, value /(n-1)) for key, value in prob_river.items())
-
-print(r"Hands that are not displayed have 0% chance of ocurring.")
-print()
-
-
-print("2nd turn (Turn)")
-print("Hand\tProbability (%)")
-for k,v in prob_turn.items():
-    print(k,v)
-print()
-
-print("2nd and 3rd turn (Turn and River)")
-print("Hand\tProbability (%)")
-
-for k,v in prob_turn_and_river.items():
-    print(k,v)
-print()
-
-print("3rd turn (River) after drawing the 4th card")
-print("Hand\tProbability (%)")
-
-for k,v in prob_river.items():
-    print(k,v)
+print(calcProb())
