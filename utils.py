@@ -34,8 +34,17 @@ def hand_quality_helper(cards: list, probs: dict, evaluator):
     if len(cards) == 7:
         score_sim = evaluator.evaluate(cards[:5], cards[5:])
         class_sim = evaluator.class_to_string(evaluator.get_rank_class(score_sim))
-        probs[class_sim] += 1
+        
+        add = False
+        for hand_type in ['Royal Flush', 'Straight Flush', 'Four of a Kind', 'Full House', 'Flush', 'Straight', 'Three of a Kind', 'Two Pair', 'Pair', 'High Card']:
+            if hand_type==class_sim:
+                add = True
+            
+            if add:
+                probs[class_sim] += 1
+        
         probs["counter"] += 1
+        return probs
     else:
         deck = Deck()
         deck = deck.draw(52)
