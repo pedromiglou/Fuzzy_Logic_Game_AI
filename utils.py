@@ -75,7 +75,7 @@ def _extracted_from_hand_quality_helper_3(evaluator, cards, probs):
             add = True
 
         if add:
-            probs[class_sim] += 1
+            probs[hand_type] += 1
 
     probs["counter"] += 1
     return probs
