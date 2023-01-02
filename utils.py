@@ -30,15 +30,15 @@ def hand_quality(cards: list = None):
         ]
     }
 
-    probs = hand_quality_helper(cards, probs, evaluator)
+    probs = hand_quality_helper(cards, probs, evaluator, depth=0)
 
     probs.update((key, value / probs["counter"] * 100) for key, value in probs.items())
 
     return probs
 
 
-def hand_quality_helper(cards: list, probs: dict, evaluator):
-    if len(cards) == 7:
+def hand_quality_helper(cards: list, probs: dict, evaluator, depth: int):
+    if len(cards) == 7 or depth>2:
         return _extracted_from_hand_quality_helper_3(evaluator, cards, probs)
     deck = Deck()
     deck = deck.draw(52)
@@ -47,7 +47,7 @@ def hand_quality_helper(cards: list, probs: dict, evaluator):
         deck.remove(card)
 
     for i in range(52 - len(cards)):
-        probs = hand_quality_helper(cards + [deck[i]], probs, evaluator)
+        probs = hand_quality_helper(cards + [deck[i]], probs, evaluator, depth+1)
 
     return probs
 
