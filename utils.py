@@ -79,7 +79,7 @@ def _extracted_from_hand_quality_helper_3(evaluator, cards, probs):
     return probs
 
 
-def board_quality(board: list = None, players: str = 1, index_player: int = 1):
+def board_quality(board: list = None, players: int = 1, index_player: int = 1):
     if board is None:
         board = []
     result = board_no_players(board)
