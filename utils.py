@@ -4,6 +4,8 @@ RF = "Royal Flush"
 SF = "Straight Flush"
 K4 = "Four of a Kind"
 FH = "Full House"
+K3 = "Three of a Kind"
+K2 = "Two Pair"
 
 
 def hand_quality(cards: list = None):
@@ -22,8 +24,8 @@ def hand_quality(cards: list = None):
             FH,
             "Flush",
             "Straight",
-            "Three of a Kind",
-            "Two Pair",
+            K3,
+            K2,
             "Pair",
             "High Card",
             "counter",
@@ -38,7 +40,7 @@ def hand_quality(cards: list = None):
 
 
 def hand_quality_helper(cards: list, probs: dict, evaluator, depth: int):
-    if len(cards) == 7 or depth>2:
+    if len(cards) == 7 or depth > 2:
         return _extracted_from_hand_quality_helper_3(evaluator, cards, probs)
     deck = Deck()
     deck = deck.draw(52)
@@ -47,7 +49,7 @@ def hand_quality_helper(cards: list, probs: dict, evaluator, depth: int):
         deck.remove(card)
 
     for i in range(52 - len(cards)):
-        probs = hand_quality_helper(cards + [deck[i]], probs, evaluator, depth+1)
+        probs = hand_quality_helper(cards + [deck[i]], probs, evaluator, depth + 1)
 
     return probs
 
@@ -64,8 +66,8 @@ def _extracted_from_hand_quality_helper_3(evaluator, cards, probs):
         FH,
         "Flush",
         "Straight",
-        "Three of a Kind",
-        "Two Pair",
+        K3,
+        K2,
         "Pair",
         "High Card",
     ]:
@@ -83,7 +85,7 @@ def board_quality(board: list = None, players: int = 1, index_player: int = 1):
     if board is None:
         board = []
     result = board_no_players(board)
-    return result + 0.1 * players + ((players - index_player) / 10)
+    return result + 0.1 * (players - 1) + ((players - index_player) / 10)
 
 
 def board_no_players(board):
@@ -102,7 +104,7 @@ def board_no_players(board):
         or probs["Straight"] != 0
     ):
         return 4
-    elif probs["Three of a Kind"] != 0 or probs["Two Pair"] != 0:
+    elif probs[K3] != 0 or probs[K2] != 0:
         return 3
 
     board = [Card.int_to_pretty_str(x)[1] for x in board]
